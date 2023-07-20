@@ -1,0 +1,44 @@
+{
+  "name": "blog-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE-ENV=test jest --verbose --runInBand",
+    "start": "cross-env NODE-ENV=production node index.js",
+    "dev": "cross-env NODE-ENV=development nodemon index.js",
+    "start:test": "cross-env NODE_ENV=test nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RodolfoSarkisRocha/fullstack-open-part-4.git"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Rodolfo Sarkis Rocha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RodolfoSarkisRocha/fullstack-open-part-4/issues"
+  },
+  "homepage": "https://github.com/RodolfoSarkisRocha/fullstack-open-part-4#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.6",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "jest": "^26.4.2",
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
