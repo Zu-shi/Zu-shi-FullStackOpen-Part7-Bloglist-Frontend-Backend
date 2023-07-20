@@ -3,13 +3,13 @@
 const user = {
   name: 'Matti Luukkainen',
   username: 'mluukkai',
-  password: 'salainen'
+  password: 'salainen',
 }
 
 const user2 = {
   name: 'zushi',
   username: 'zms',
-  password: 'password'
+  password: 'password',
 }
 
 Cypress.Commands.add('Login', (user) => {
@@ -19,8 +19,7 @@ Cypress.Commands.add('Login', (user) => {
 })
 
 Cypress.Commands.add('postArticle', (title, author, url) => {
-  cy.get('body').then(body => {
-
+  cy.get('body').then((body) => {
     // cy.get('#blogSubmitFormButton').then(($el) => {
     //   if ($el.length) {
     //     // Element exists, do something
@@ -105,7 +104,7 @@ describe('Note app', function () {
       beforeEach(function () {
         cy.intercept({
           method: 'POST',
-          url: '*'
+          url: '*',
         }).as('posts')
 
         cy.get('#blogSubmitFormButton').click()
@@ -114,7 +113,7 @@ describe('Note app', function () {
         cy.get('input').eq(2).type('url text')
         cy.contains('button', 'save').click()
 
-        cy.wait('@posts').then(xhr => {
+        cy.wait('@posts').then((xhr) => {
           cy.log(xhr.responseBody)
           cy.log(xhr.requestBody)
           //expect(xhr.method).to.eq('POST')

@@ -14,7 +14,7 @@ const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
+    marginBottom: 5,
   }
 
   let isUser = blog.user === user
@@ -25,26 +25,39 @@ const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
 
   const renderDeleteButton = () => {
     if (isUser) {
-      return <button onClick={(event) => { onDeleteArticle(event, blog) }}>Delete</button>
+      return (
+        <button
+          onClick={(event) => {
+            onDeleteArticle(event, blog)
+          }}
+        >
+          Delete
+        </button>
+      )
     } else {
       return
     }
   }
 
   return (
-    < div style={blogStyle}>
+    <div style={blogStyle}>
       {blog.title}
       <div>
         likes: {blog.likes}
-        <button onClick={(event) => { onLikeArticle(event, blog) }}>Like This</button>
+        <button
+          onClick={(event) => {
+            onLikeArticle(event, blog)
+          }}
+        >
+          Like This
+        </button>
       </div>
       <Toggleable showButtonText="show details" hideButtonText="hide details">
-        <div>
-          author: {blog.author}
-        </div>
+        <div>author: {blog.author}</div>
       </Toggleable>
       {renderDeleteButton()}
-    </div>)
+    </div>
+  )
 }
 
 export default Blog

@@ -20,7 +20,7 @@ const mostBlogs = (blogs) => {
   const blogsByAuthor = blogs.reduce((acc, current) => {
     const newArr = JSON.parse(JSON.stringify(acc));
     const authorIndex = newArr.findIndex(
-      (collection) => current.author === collection[0].author
+      (collection) => current.author === collection[0].author,
     );
     if (authorIndex !== -1) newArr[authorIndex].push(current);
     else newArr.push([current]);
@@ -44,7 +44,7 @@ const mostLikes = (blogs) => {
   const blogsByAuthor = blogs.reduce((acc, current) => {
     const newArr = JSON.parse(JSON.stringify(acc));
     const authorIndex = newArr.findIndex(
-      (collection) => current.author === collection[0].author
+      (collection) => current.author === collection[0].author,
     );
     if (authorIndex !== -1) newArr[authorIndex].push(current);
     else newArr.push([current]);
@@ -64,7 +64,7 @@ const mostLikes = (blogs) => {
     return prev.likes > current.likes ? prev : current;
   }, {});
 
-  return mostLikedAuthor
+  return mostLikedAuthor;
 };
 
 module.exports = {

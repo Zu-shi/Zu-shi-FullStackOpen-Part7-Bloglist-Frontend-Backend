@@ -14,17 +14,21 @@ describe('renders content', () => {
     const blog = {
       title: 'Component testing is done with react-testing-library',
       likes: 300,
-      author: 'eee'
+      author: 'eee',
     }
 
-    const onLikeArticle = () => { likeArticle() }
+    const onLikeArticle = () => {
+      likeArticle()
+    }
 
     render(<Blog blog={blog} onLikeArticle={onLikeArticle} />)
     // Assignment 1
   })
 
   test('renders basic text for blog, and QueryByText works', () => {
-    const element = screen.getByText('Component testing is done with react-testing-library')
+    const element = screen.getByText(
+      'Component testing is done with react-testing-library',
+    )
     expect(element).toBeDefined()
 
     const elementLike = screen.queryByText('likes: 300')

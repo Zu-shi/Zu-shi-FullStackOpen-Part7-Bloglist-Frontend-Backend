@@ -8,10 +8,10 @@ const Toggleable = (props) => {
 
   return (
     <div>
-      <div style={showWhenVisible}>
-        {props.children}
-      </div >
-      <button id={props.buttonName} onClick={() => setVisible(!visible)}>{visible ? props.hideButtonText : props.showButtonText}</button>
+      <div style={showWhenVisible}>{props.children}</div>
+      <button id={props.buttonName} onClick={() => setVisible(!visible)}>
+        {visible ? props.hideButtonText : props.showButtonText}
+      </button>
     </div>
   )
   /*

@@ -1,11 +1,11 @@
-const app = require("../app");
-const userRouter = require("express").Router();
-const User = require("../models/user.js");
-const bcrypt = require("bcrypt");
-const errorENUM = require("../utils/errorENUM");
+const app = require('../app');
+const userRouter = require('express').Router();
+const User = require('../models/user.js');
+const bcrypt = require('bcrypt');
+const errorENUM = require('../utils/errorENUM');
 
 // Create user
-userRouter.post("/", async (request, response, next) => {
+userRouter.post('/', async (request, response, next) => {
   const { username, name, password } = request.body;
 
   const saltRounds = 10;
@@ -24,15 +24,15 @@ userRouter.post("/", async (request, response, next) => {
     const savedUser = await user.save();
 
     response.json(savedUser);
-  } catch (err) {    
+  } catch (err) {
     next(err);
   }
 });
 
 // Get users
-userRouter.get("/", async (request, response, next) => {
+userRouter.get('/', async (request, response, next) => {
   try {
-    const result = await User.find({}).populate("blogs");
+    const result = await User.find({}).populate('blogs');
     response.json(result);
   } catch (err) {
     next(err);

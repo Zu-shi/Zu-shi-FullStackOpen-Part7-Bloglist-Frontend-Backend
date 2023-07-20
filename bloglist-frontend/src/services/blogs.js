@@ -3,7 +3,7 @@ const baseUrl = '/api/blogs'
 
 const getAllByLikesOrder = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => {
+  return request.then((response) => {
     console.log('getAllByLikesOrder')
     console.log(response)
     return response.data.sort((a, b) => b.likes - a.likes)
@@ -19,9 +19,9 @@ const postBlog = async ({ user, blogTitle, author, url }) => {
   }
 
   const content = {
-    'title': blogTitle,
-    'author': author,
-    'url': url
+    title: blogTitle,
+    author: author,
+    url: url,
   }
 
   const response = await axios.post(baseUrl, content, config)
@@ -45,7 +45,6 @@ const likeBlog = async ({ user, blog }) => {
   const response = await axios.put(baseUrl + '/' + blog.id, content, config)
   return response
 }
-
 
 const deleteBlog = async ({ user, blog }) => {
   const token = `bearer ${user.token}`

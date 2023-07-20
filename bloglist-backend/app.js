@@ -1,21 +1,24 @@
 // Configuration
-const express = require("express");
+const express = require('express');
 const app = express();
-const cors = require("cors");
-const mongoose = require("mongoose");
-const { MONGODB_URI } = require("./config");
+const cors = require('cors');
+const mongoose = require('mongoose');
+const { MONGODB_URI } = require('./config');
 
 // Utils
-const logger = require("./utils/logger");
+const logger = require('./utils/logger');
 
 // Routes
-const blogRouter = require("./controllers/blogController");
-const userRouter = require("./controllers/userController");
-const loginRouter = require("./controllers/loginController");
-
+const blogRouter = require('./controllers/blogController');
+const userRouter = require('./controllers/userController');
+const loginRouter = require('./controllers/loginController');
 
 // Middlewares
-const { errorHandler, requestLogger, tokenExtractor } = require("./utils/middleware");
+const {
+  errorHandler,
+  requestLogger,
+  tokenExtractor,
+} = require('./utils/middleware');
 
 // Database options
 const mongoDBOptions = {
@@ -26,33 +29,33 @@ const mongoDBOptions = {
 };
 
 // Connecting to database
-logger.info("connecting to", MONGODB_URI);
+logger.info('connecting to', MONGODB_URI);
 
 mongoose
   .connect(MONGODB_URI, mongoDBOptions)
   .then(() => {
-    logger.info("connected to MongoDB");
-    console.log("controller")
+    logger.info('connected to MongoDB');
+    console.log('controller');
   })
   .catch((error) => {
-    logger.error("error connecting to MongoDB", error.message);
+    logger.error('error connecting to MongoDB', error.message);
   });
 
 // Applying middlewares
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
-app.use(tokenExtractor)
-app.use("/api/blogs", blogRouter);
-app.use("/api/users", userRouter);
-app.use("/api/login", loginRouter);
+app.use(tokenExtractor);
+app.use('/api/blogs', blogRouter);
+app.use('/api/users', userRouter);
+app.use('/api/login', loginRouter);
 app.use(errorHandler);
 
 module.exports = app;
 
-console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV == "test") {
-  console.log("Adding test controller")
-  const testRouter = require("./controllers/testController");
-  app.use("/api/testing", testRouter);
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV == 'test') {
+  console.log('Adding test controller');
+  const testRouter = require('./controllers/testController');
+  app.use('/api/testing', testRouter);
 }
