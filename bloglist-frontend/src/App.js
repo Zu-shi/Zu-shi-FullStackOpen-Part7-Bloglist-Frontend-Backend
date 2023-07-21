@@ -1,5 +1,6 @@
 //import { parse, stringify, toJSON, fromJSON } from 'flatted';
 import { useState, useEffect } from 'react'
+import { useQuery } from 'react-query'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -9,9 +10,23 @@ import loginService from './services/login'
 import Toggleable from './components/Toggleable'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMesssage] = useState(null)
+  // const queryClient = new QueryClient()
+
+  // const { blogs, error, isLoading } = useQuery('blogs', async () => {
+  //   const response = await blogService.getAllByQuery()
+  //   return response.data
+  // })
+
+  const { data, error, isLoading } = useQuery('blogs', blogService.getAllByQuery)
+  /*
+  useQuery('blogs', async () => {
+    const response = await blogService.getAllByQuery()
+    return response.data
+  })
+  */
 
   useEffect(() => {
     console.log('test')
@@ -130,7 +145,9 @@ const App = () => {
     blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
   }, [])
 
+  console.log(data)
   return (
+    // <QueryClientProvider client={queryClient}>
     <div>
       <Notification message={errorMessage} />
 
@@ -151,16 +168,25 @@ const App = () => {
       )}
 
       <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          onLikeArticle={onLikeArticle}
-          onDeleteArticle={onDeleteArticle}
-          user={user.id}
-        />
-      ))}
+      <div>
+        {isLoading || error ? ('Loading or Error') :
+          (
+            data.map(
+              (blog) => (
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  onLikeArticle={onLikeArticle}
+                  onDeleteArticle={onDeleteArticle}
+                  user={user.id}
+                />
+              )
+            )
+          )
+        }
+      </div>
     </div>
+    // </QueryClientProvider>
   )
 }
 

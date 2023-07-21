@@ -1,6 +1,27 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
+const getAllByQuery = async () => {
+  const response = await axios.get(baseUrl)
+  console.log('GetAllByQuery response')
+  console.log(response)
+  return response.data
+}
+
+const postBlogByQuery = async (user, blog) => {
+  const token = `bearer ${user.token}`
+  console.log(token)
+
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const request = axios.post(baseUrl, blog, config)
+  return request.then((response) => {
+    return response.data
+  })
+}
+
 const getAllByLikesOrder = () => {
   const request = axios.get(baseUrl)
   return request.then((response) => {
@@ -59,4 +80,11 @@ const deleteBlog = async ({ user, blog }) => {
   return response
 }
 
-export default { getAllByLikesOrder, postBlog, likeBlog, deleteBlog }
+export default {
+  getAllByLikesOrder,
+  postBlog,
+  likeBlog,
+  deleteBlog,
+  getAllByQuery,
+  postBlogByQuery
+}
