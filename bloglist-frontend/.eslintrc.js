@@ -21,6 +21,7 @@ module.exports = {
     quotes: ['error', 'single'],
     // semi: ['error', 'never'],
     eqeqeq: 'error',
+    "no-unused-vars": "warn",
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
     'arrow-spacing': ['error', { before: true, after: true }],

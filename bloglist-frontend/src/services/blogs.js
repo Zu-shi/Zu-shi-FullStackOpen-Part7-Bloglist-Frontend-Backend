@@ -8,7 +8,10 @@ const getAllByQuery = async () => {
   return response.data
 }
 
-const postBlogByQuery = async (user, blog) => {
+const postBlogByQuery = ({ user, blog }) => {
+  console.log('postBlogByQuery response')
+  console.log(user)
+  console.log(blog)
   const token = `bearer ${user.token}`
   console.log(token)
 
@@ -16,10 +19,13 @@ const postBlogByQuery = async (user, blog) => {
     headers: { Authorization: token },
   }
 
-  const request = axios.post(baseUrl, blog, config)
-  return request.then((response) => {
-    return response.data
-  })
+  return axios.post(baseUrl, blog, config).then(
+    response => {
+      console.log('postBlogByQuery response 2')
+      console.log(response)
+      return response.data
+    }
+  )
 }
 
 const getAllByLikesOrder = () => {

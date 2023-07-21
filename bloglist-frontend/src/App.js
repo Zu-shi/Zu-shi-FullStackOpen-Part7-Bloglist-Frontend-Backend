@@ -103,41 +103,6 @@ const App = () => {
       })
   }
 
-  const onSubmitBlog = function (event, blogTitle, author, url) {
-    event.preventDefault()
-    //console.log("submitting with ", this.username, this.password)
-
-    blogService
-      .postBlog({ user, blogTitle, author, url })
-      .then(() => {
-        // don't need to check response status, error go directly below.
-        // To optimize later, does not need to make a roundtrip to server.
-        blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
-      })
-      .catch((error) => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data)
-          console.log(error.response.status)
-          console.log(error.response.headers)
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request)
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message)
-        }
-        console.log(error.config)
-        setErrorMesssage('Posting blog article failed')
-        setTimeout(() => {
-          setErrorMesssage(null)
-        }, 5000)
-      })
-  }
-
   const onSubmitLogout = function () {
     loginService.logout()
     setUser(null)
@@ -153,26 +118,26 @@ const App = () => {
     // <QueryClientProvider client={queryClient}>
     <div>
       <NotificationContext.Provider value={setErrorMesssage}>
-        <Notification message={errorMessage} />
-
-        {user ? (
-          <div>
-            {user.username} is logged in <> </>
-            <button onClick={onSubmitLogout}>Logout</button>
-            <Toggleable
-              showButtonText={'Show Blog Submit Form'}
-              hideButtonText={'Hide Blog Submit Form'}
-              buttonName={'blogSubmitFormButton'}
-            >
-              <BlogForm onSubmitBlog={onSubmitBlog} />
-            </Toggleable>
-          </div>
-        ) : (
-          <LoginForm onSubmitLogin={onSubmitLogin} />
-        )}
-
-        <h2>blogs</h2>
         <UserContext.Provider value={user}>
+          <Notification message={errorMessage} />
+
+          {user ? (
+            <div>
+              {user.username} is logged in <> </>
+              <button onClick={onSubmitLogout}>Logout</button>
+              <Toggleable
+                showButtonText={'Show Blog Submit Form'}
+                hideButtonText={'Hide Blog Submit Form'}
+                buttonName={'blogSubmitFormButton'}
+              >
+                <BlogForm />
+              </Toggleable>
+            </div>
+          ) : (
+            <LoginForm onSubmitLogin={onSubmitLogin} />
+          )}
+
+          <h2>blogs</h2>
           <BlogList />
         </UserContext.Provider>
       </NotificationContext.Provider>
