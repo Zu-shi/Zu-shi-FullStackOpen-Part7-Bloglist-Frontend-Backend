@@ -4,10 +4,9 @@ import Blog from './Blog'
 import blogService from '../services/blogs'
 
 export const BlogList = () => {
-  const { blogs, error, isLoading } = useQuery('blogs', async () => {
-    const response = await blogService.getAllByQuery()
-    return response.data
-  })
+  // const [user, setUser] = useState(null)
+
+  const { data: blogs, error, isLoading } = useQuery('blogs', blogService.getAllByQuery)
 
   return (
     <div>
@@ -18,9 +17,9 @@ export const BlogList = () => {
               <Blog
                 key={blog.id}
                 blog={blog}
-                onLikeArticle={onLikeArticle}
-                onDeleteArticle={onDeleteArticle}
-                user={user.id}
+                onLikeArticle={null}
+                onDeleteArticle={null}
+              // user={user.id}
               />
             )
           )

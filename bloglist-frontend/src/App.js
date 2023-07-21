@@ -1,13 +1,14 @@
 //import { parse, stringify, toJSON, fromJSON } from 'flatted';
 import { useState, useEffect } from 'react'
-import { useQuery } from 'react-query'
-import Blog from './components/Blog'
+// import { useQuery } from 'react-query'
+// import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Toggleable from './components/Toggleable'
+import { BlogList } from './components/BlogList'
 
 const App = () => {
   const [, setBlogs] = useState([])
@@ -20,7 +21,7 @@ const App = () => {
   //   return response.data
   // })
 
-  const { data, error, isLoading } = useQuery('blogs', blogService.getAllByQuery)
+  // const { data, error, isLoading } = useQuery('blogs', blogService.getAllByQuery)
   /*
   useQuery('blogs', async () => {
     const response = await blogService.getAllByQuery()
@@ -33,49 +34,49 @@ const App = () => {
     setUser(JSON.parse(loginService.getCurrentUser()))
   }, [])
 
-  const onLikeArticle = (event, blog) => {
-    event.preventDefault()
-    console.log('submitting like with ', user, blog)
-    //console.log("submitting with ", this.username, this.password)
+  // const onLikeArticle = (event, blog) => {
+  //   event.preventDefault()
+  //   console.log('submitting like with ', user, blog)
+  //   //console.log("submitting with ", this.username, this.password)
 
-    blogService
-      .likeBlog({ user, blog })
-      .then((response) => {
-        // don't need to check response status, error go directly below.
-        console.log('succeeded like')
-        console.log(response.data)
-        blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
-      })
-      .catch((error) => {
-        console.log(error)
-        setErrorMesssage('Wrong credentials')
-        setTimeout(() => {
-          setErrorMesssage(null)
-        }, 5000)
-      })
-  }
+  //   blogService
+  //     .likeBlog({ user, blog })
+  //     .then((response) => {
+  //       // don't need to check response status, error go directly below.
+  //       console.log('succeeded like')
+  //       console.log(response.data)
+  //       blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //       setErrorMesssage('Wrong credentials')
+  //       setTimeout(() => {
+  //         setErrorMesssage(null)
+  //       }, 5000)
+  //     })
+  // }
 
-  const onDeleteArticle = (event, blog) => {
-    event.preventDefault()
-    console.log('submitting delete with ', user, blog)
-    //console.log("submitting with ", this.username, this.password)
+  // const onDeleteArticle = (event, blog) => {
+  //   event.preventDefault()
+  //   console.log('submitting delete with ', user, blog)
+  //   //console.log("submitting with ", this.username, this.password)
 
-    blogService
-      .deleteBlog({ user, blog })
-      .then((response) => {
-        // don't need to check response status, error go directly below.
-        console.log('succeeded like')
-        console.log(response.data)
-        blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
-      })
-      .catch((error) => {
-        console.log(error)
-        setErrorMesssage('Wrong credentials')
-        setTimeout(() => {
-          setErrorMesssage(null)
-        }, 5000)
-      })
-  }
+  //   blogService
+  //     .deleteBlog({ user, blog })
+  //     .then((response) => {
+  //       // don't need to check response status, error go directly below.
+  //       console.log('succeeded like')
+  //       console.log(response.data)
+  //       blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //       setErrorMesssage('Wrong credentials')
+  //       setTimeout(() => {
+  //         setErrorMesssage(null)
+  //       }, 5000)
+  //     })
+  // }
 
   const onSubmitLogin = function (event, username, password) {
     event.preventDefault()
@@ -145,7 +146,7 @@ const App = () => {
     blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
   }, [])
 
-  console.log(data)
+  // console.log(data)
   return (
     // <QueryClientProvider client={queryClient}>
     <div>
@@ -168,23 +169,7 @@ const App = () => {
       )}
 
       <h2>blogs</h2>
-      <div>
-        {isLoading || error ? ('Loading or Error') :
-          (
-            data.map(
-              (blog) => (
-                <Blog
-                  key={blog.id}
-                  blog={blog}
-                  onLikeArticle={onLikeArticle}
-                  onDeleteArticle={onDeleteArticle}
-                  user={user.id}
-                />
-              )
-            )
-          )
-        }
-      </div>
+      <BlogList />
     </div>
     // </QueryClientProvider>
   )
