@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
 import App from './App'
 
+export const qc = new QueryClient()
 export const Qcp = () => {
-  const qc = new QueryClient()
 
   return (
     <QueryClientProvider client={qc}>

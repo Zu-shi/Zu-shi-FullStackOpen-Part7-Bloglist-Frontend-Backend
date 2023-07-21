@@ -9,6 +9,8 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Toggleable from './components/Toggleable'
 import { BlogList } from './components/BlogList'
+import { UserContext } from './components/UserContext'
+import { NotificationContext } from './components/NotificationContext'
 
 const App = () => {
   const [, setBlogs] = useState([])
@@ -150,26 +152,30 @@ const App = () => {
   return (
     // <QueryClientProvider client={queryClient}>
     <div>
-      <Notification message={errorMessage} />
+      <NotificationContext.Provider value={setErrorMesssage}>
+        <Notification message={errorMessage} />
 
-      {user ? (
-        <div>
-          {user.username} is logged in <> </>
-          <button onClick={onSubmitLogout}>Logout</button>
-          <Toggleable
-            showButtonText={'Show Blog Submit Form'}
-            hideButtonText={'Hide Blog Submit Form'}
-            buttonName={'blogSubmitFormButton'}
-          >
-            <BlogForm onSubmitBlog={onSubmitBlog} />
-          </Toggleable>
-        </div>
-      ) : (
-        <LoginForm onSubmitLogin={onSubmitLogin} />
-      )}
+        {user ? (
+          <div>
+            {user.username} is logged in <> </>
+            <button onClick={onSubmitLogout}>Logout</button>
+            <Toggleable
+              showButtonText={'Show Blog Submit Form'}
+              hideButtonText={'Hide Blog Submit Form'}
+              buttonName={'blogSubmitFormButton'}
+            >
+              <BlogForm onSubmitBlog={onSubmitBlog} />
+            </Toggleable>
+          </div>
+        ) : (
+          <LoginForm onSubmitLogin={onSubmitLogin} />
+        )}
 
-      <h2>blogs</h2>
-      <BlogList />
+        <h2>blogs</h2>
+        <UserContext.Provider value={user}>
+          <BlogList />
+        </UserContext.Provider>
+      </NotificationContext.Provider>
     </div>
     // </QueryClientProvider>
   )

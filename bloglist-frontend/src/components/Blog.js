@@ -18,10 +18,10 @@ const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
   }
 
   let isUser = blog.user === user
-  console.log('---')
-  console.log(blog)
-  console.log(user)
-  console.log(blog.user === user)
+  // console.log('---')
+  // console.log(blog)
+  // console.log(user)
+  // console.log(blog.user === user)
 
   const renderDeleteButton = () => {
     if (isUser) {
