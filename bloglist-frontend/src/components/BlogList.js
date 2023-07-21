@@ -1,4 +1,4 @@
-import { useQuery, setQueryData } from 'react-query'
+import { useQuery } from 'react-query'
 // import { QueryClient, QueryClientProvider } from 'react-query'
 import Blog from './Blog'
 import blogService from '../services/blogs'
@@ -57,7 +57,7 @@ export const BlogList = () => {
         // don't need to check response status, error go directly below.
         console.log('succeeded like')
         console.log(response.data)
-        setQueryData('blogs', blogs.filter((item) => (item.id !== blog.id)));
+        qc.setQueryData('blogs', blogs.filter((item) => (item.id !== blog.id)));
         // blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
       })
       .catch((error) => {
@@ -69,9 +69,11 @@ export const BlogList = () => {
       })
   }
 
+  console.log(user)
+
   return (
     <div>
-      {isLoading || error ? ('Loading or Error') :
+      {isLoading || error || !user ? ('Loading or Error') :
         (
           blogs.map(
             (blog) => (
