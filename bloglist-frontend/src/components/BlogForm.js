@@ -29,8 +29,9 @@ const BlogForm = () => {
         data.push(res)
         console.log('---')
         console.log(data)
+        // Note to self: do not post
         qc.setQueryData('blogs', data)
-        setBlogTitle('')
+        setBlogTitle(prevBlogTitle => '')
         setAuthor('')
         setUrl('')
         setErrorMesssage('New article posted!')
@@ -64,6 +65,7 @@ const BlogForm = () => {
 
   const onSubmitBlog = function (event, title, author, url) {
     event.preventDefault()
+    event.target.reset()
     //console.log("submitting with ", this.username, this.password)
     // eslint-disable-next-line no-unused-vars
     const blog = { title, author, url }

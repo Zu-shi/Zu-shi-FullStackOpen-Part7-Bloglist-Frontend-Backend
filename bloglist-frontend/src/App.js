@@ -11,74 +11,20 @@ import Toggleable from './components/Toggleable'
 import { BlogList } from './components/BlogList'
 import { UserContext } from './components/UserContext'
 import { NotificationContext } from './components/NotificationContext'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { getUsersByQuery } from './services/users'
+import { useQuery } from 'react-query'
+import { Container, TableContainer, Table, TableBody, TableRow, TableCell, TableHead, Paper } from '@mui/material'
 
 const App = () => {
   const [, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMesssage] = useState(null)
-  // const queryClient = new QueryClient()
-
-  // const { blogs, error, isLoading } = useQuery('blogs', async () => {
-  //   const response = await blogService.getAllByQuery()
-  //   return response.data
-  // })
-
-  // const { data, error, isLoading } = useQuery('blogs', blogService.getAllByQuery)
-  /*
-  useQuery('blogs', async () => {
-    const response = await blogService.getAllByQuery()
-    return response.data
-  })
-  */
 
   useEffect(() => {
     console.log('test')
     setUser(JSON.parse(loginService.getCurrentUser()))
   }, [])
-
-  // const onLikeArticle = (event, blog) => {
-  //   event.preventDefault()
-  //   console.log('submitting like with ', user, blog)
-  //   //console.log("submitting with ", this.username, this.password)
-
-  //   blogService
-  //     .likeBlog({ user, blog })
-  //     .then((response) => {
-  //       // don't need to check response status, error go directly below.
-  //       console.log('succeeded like')
-  //       console.log(response.data)
-  //       blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //       setErrorMesssage('Wrong credentials')
-  //       setTimeout(() => {
-  //         setErrorMesssage(null)
-  //       }, 5000)
-  //     })
-  // }
-
-  // const onDeleteArticle = (event, blog) => {
-  //   event.preventDefault()
-  //   console.log('submitting delete with ', user, blog)
-  //   //console.log("submitting with ", this.username, this.password)
-
-  //   blogService
-  //     .deleteBlog({ user, blog })
-  //     .then((response) => {
-  //       // don't need to check response status, error go directly below.
-  //       console.log('succeeded like')
-  //       console.log(response.data)
-  //       blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //       setErrorMesssage('Wrong credentials')
-  //       setTimeout(() => {
-  //         setErrorMesssage(null)
-  //       }, 5000)
-  //     })
-  // }
 
   const onSubmitLogin = function (event, username, password) {
     event.preventDefault()
@@ -113,35 +59,94 @@ const App = () => {
     blogService.getAllByLikesOrder().then((blogs) => setBlogs(blogs))
   }, [])
 
+  const padding = {
+    padding: 5
+  }
+
+  console.log(user)
+  const Blogs = () => {
+    return (
+      <div>
+        {user ? (
+          <div>
+            {user.username} is logged in <> </>
+            <button onClick={onSubmitLogout}>Logout</button>
+            <Toggleable
+              showButtonText={'Show Blog Submit Form'}
+              hideButtonText={'Hide Blog Submit Form'}
+              buttonName={'blogSubmitFormButton'}
+            >
+              <BlogForm />
+            </Toggleable>
+          </div>
+        ) : (
+          <LoginForm onSubmitLogin={onSubmitLogin} />
+        )}
+
+        <h2>blogs</h2>
+        <BlogList />
+      </div >
+    )
+  }
+
+  const Users = () => {
+    const { data: users, error, isLoading } = useQuery('users', getUsersByQuery)
+
+    /*
+    const usersElem = []
+    if (!error && !isLoading) {
+      usersElem = users.map(user => { (<text key={user.username}>{user.username}</text>) })
+    }
+    */
+
+    return (
+      <div>
+        {error || isLoading ? 'List of users is loading' :
+
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead >
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell align="left">Blog Articles Count</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user.username}>
+                    <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.blogs.length}</TableCell>
+                  </TableRow>))
+                }
+              </TableBody>
+            </Table>
+          </TableContainer>
+        }
+      </div>
+    )
+  }
   // console.log(data)
   return (
     // <QueryClientProvider client={queryClient}>
-    <div>
-      <NotificationContext.Provider value={setErrorMesssage}>
-        <UserContext.Provider value={user}>
-          <Notification message={errorMessage} />
+    <Container>
+      <Router>
+        <NotificationContext.Provider value={setErrorMesssage}>
+          <UserContext.Provider value={user}>
+            <Notification message={errorMessage} />
 
-          {user ? (
-            <div>
-              {user.username} is logged in <> </>
-              <button onClick={onSubmitLogout}>Logout</button>
-              <Toggleable
-                showButtonText={'Show Blog Submit Form'}
-                hideButtonText={'Hide Blog Submit Form'}
-                buttonName={'blogSubmitFormButton'}
-              >
-                <BlogForm />
-              </Toggleable>
-            </div>
-          ) : (
-            <LoginForm onSubmitLogin={onSubmitLogin} />
-          )}
+            <Link style={padding} to="/">Home</Link>
+            <Link style={padding} to="/blogs">Blogs</Link>
+            <Link style={padding} to="/users">Users</Link>
+            <Routes>
+              <Route path="/" element={<Blogs />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/users" element={<Users />} />
+            </Routes>
 
-          <h2>blogs</h2>
-          <BlogList />
-        </UserContext.Provider>
-      </NotificationContext.Provider>
-    </div>
+          </UserContext.Provider>
+        </NotificationContext.Provider>
+      </Router>
+    </Container>
     // </QueryClientProvider>
   )
 }
