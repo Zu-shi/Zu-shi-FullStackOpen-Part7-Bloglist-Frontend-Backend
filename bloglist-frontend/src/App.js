@@ -11,8 +11,8 @@ import Toggleable from './components/Toggleable'
 import { BlogList } from './components/BlogList'
 import { UserContext } from './components/UserContext'
 import { NotificationContext } from './components/NotificationContext'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { getUsersByQuery } from './services/users'
+import { BrowserRouter as Router, Routes, Route, Link, useMatch, useParams } from 'react-router-dom'
+import { getUsersByQuery, getSingleUserByQuery } from './services/users'
 import { useQuery } from 'react-query'
 import { Container, TableContainer, Table, TableBody, TableRow, TableCell, TableHead, Paper } from '@mui/material'
 
@@ -89,8 +89,13 @@ const App = () => {
     )
   }
 
+  const { data: users, error, isLoading } = useQuery('users', getUsersByQuery)
+
+  const match = useMatch('/users/:username')
+  if (!users) return null
+  const userLink = match ? users.find(user => user.username === match.params.username) : null
+
   const Users = () => {
-    const { data: users, error, isLoading } = useQuery('users', getUsersByQuery)
 
     /*
     const usersElem = []
@@ -101,7 +106,7 @@ const App = () => {
 
     return (
       <div>
-        {error || isLoading ? 'List of users is loading' :
+        {error || isLoading ? 'User is loading' :
 
           <TableContainer component={Paper}>
             <Table>
@@ -114,8 +119,42 @@ const App = () => {
               <TableBody>
                 {users.map((user) => (
                   <TableRow key={user.username}>
-                    <TableCell>{user.username}</TableCell>
+                    <TableCell><Link to={`/users/${user.username}`}>{user.username}</Link></TableCell>
                     <TableCell>{user.blogs.length}</TableCell>
+                  </TableRow>))
+                }
+              </TableBody>
+            </Table>
+          </TableContainer>
+        }
+      </div >
+    )
+  }
+
+  const User = () => {
+    const username = useParams().username
+    // console.log('UserLink logging')
+    // console.log(userLink)
+    const { data: user, error, isLoading } =
+      useQuery([`users/${username}`, username], getSingleUserByQuery)
+
+    return (
+      <div>
+        {error || isLoading ? 'List of users is loading' :
+
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead >
+                <TableRow>
+                  <TableCell>Blog Title</TableCell>
+                  <TableCell>Blog Author</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {user.blogs.map((blog) => (
+                  <TableRow key={blog.id}>
+                    <TableCell>{blog.title}</TableCell>
+                    <TableCell>{blog.author}</TableCell>
                   </TableRow>))
                 }
               </TableBody>
@@ -125,27 +164,27 @@ const App = () => {
       </div>
     )
   }
+
   // console.log(data)
   return (
     // <QueryClientProvider client={queryClient}>
     <Container>
-      <Router>
-        <NotificationContext.Provider value={setErrorMesssage}>
-          <UserContext.Provider value={user}>
-            <Notification message={errorMessage} />
+      <NotificationContext.Provider value={setErrorMesssage}>
+        <UserContext.Provider value={user}>
+          <Notification message={errorMessage} />
 
-            <Link style={padding} to="/">Home</Link>
-            <Link style={padding} to="/blogs">Blogs</Link>
-            <Link style={padding} to="/users">Users</Link>
-            <Routes>
-              <Route path="/" element={<Blogs />} />
-              <Route path="/blogs" element={<Blogs />} />
-              <Route path="/users" element={<Users />} />
-            </Routes>
+          <Link style={padding} to="/">Home</Link>
+          <Link style={padding} to="/blogs">Blogs</Link>
+          <Link style={padding} to="/users">Users</Link>
+          <Routes>
+            <Route path="/" element={<Blogs />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/:username" element={<User user={userLink} />} />
+          </Routes>
 
-          </UserContext.Provider>
-        </NotificationContext.Provider>
-      </Router>
+        </UserContext.Provider>
+      </NotificationContext.Provider>
     </Container>
     // </QueryClientProvider>
   )
