@@ -86,7 +86,6 @@ blogRouter.put('/:id', async (request, response, next) => {
 });
 
 // GetById blog
-
 blogRouter.get('/:id', async (request, response, next) => {
   const { id } = request.params;
 

@@ -1,7 +1,7 @@
 //import { parse, stringify, toJSON, fromJSON } from 'flatted';
 import { useState, useEffect } from 'react'
 // import { useQuery } from 'react-query'
-// import Blog from './components/Blog'
+import BlogElement from './components/BlogElement'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -11,8 +11,9 @@ import Toggleable from './components/Toggleable'
 import { BlogList } from './components/BlogList'
 import { UserContext } from './components/UserContext'
 import { NotificationContext } from './components/NotificationContext'
-import { BrowserRouter as Router, Routes, Route, Link, useMatch, useParams } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, useMatch, useParams, useNavigate } from 'react-router-dom'
 import { getUsersByQuery, getSingleUserByQuery } from './services/users'
+import { useContext } from 'react'
 import { useQuery } from 'react-query'
 import { Container, TableContainer, Table, TableBody, TableRow, TableCell, TableHead, Paper } from '@mui/material'
 
@@ -20,6 +21,7 @@ const App = () => {
   const [, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMesssage] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log('test')
@@ -153,13 +155,83 @@ const App = () => {
               <TableBody>
                 {user.blogs.map((blog) => (
                   <TableRow key={blog.id}>
-                    <TableCell>{blog.title}</TableCell>
+                    {/* <TableCell>{blog.title}</TableCell> */}
+                    <TableCell><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></TableCell>
                     <TableCell>{blog.author}</TableCell>
                   </TableRow>))
                 }
               </TableBody>
             </Table>
           </TableContainer>
+        }
+      </div >
+    )
+  }
+
+  const Blog = () => {
+    const blogId = useParams().blogId
+    const user = useContext(UserContext)
+
+    const { data: blog, error, isLoading } =
+      useQuery([`blogs/${blogId}`, blogId], blogService.getSingleBlogByQuery)
+
+    const onLikeArticle = (event, blog) => {
+      event.preventDefault()
+      console.log('submitting like with ', user, blog)
+      //console.log("submitting with ", this.username, this.password)
+
+      blogService
+        .likeBlog({ user, blog })
+        .then((response) => {
+          // don't need to check response status, error go directly below.
+          console.log('succeeded like')
+          console.log(response.data)
+          setErrorMesssage(`Liked post '${blog.title}'`)
+          setTimeout(() => {
+            setErrorMesssage(null)
+          }, 5000)
+        })
+        .catch((error) => {
+          console.log(error)
+          setErrorMesssage('Wrong credentials')
+          setTimeout(() => {
+            setErrorMesssage(null)
+          }, 5000)
+        })
+    }
+
+
+    const onDeleteArticle = (event, blog) => {
+      event.preventDefault()
+      console.log('submitting delete with ', user, blog)
+      //console.log("submitting with ", this.username, this.password)
+
+      blogService
+        .deleteBlog({ user, blog })
+        .then((response) => {
+          // don't need to check response status, error go directly below.
+          console.log('succeeded like')
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+          setErrorMesssage('Wrong credentials')
+          setTimeout(() => {
+            setErrorMesssage(null)
+          }, 5000)
+        })
+    }
+
+    return (
+      <div>
+        {error || isLoading ? 'Blog is loading' :
+          <BlogElement
+            key={blog.id}
+            blog={blog}
+            onLikeArticle={onLikeArticle}
+            onDeleteArticle={onDeleteArticle}
+            user={user}
+          />
         }
       </div>
     )
@@ -179,6 +251,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Blogs />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs/:blogId" element={<Blog />} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/:username" element={<User user={userLink} />} />
           </Routes>

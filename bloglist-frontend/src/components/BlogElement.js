@@ -8,7 +8,7 @@ const LikeButton = ({ blog }) => {
 }
 */
 
-const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
+const BlogElement = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -17,7 +17,10 @@ const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
     marginBottom: 5,
   }
 
-  let isUser = blog.user === user
+
+  let isUser = user && blog.user === user.id
+
+
   // console.log('---')
   // console.log(blog)
   // console.log(user)
@@ -60,4 +63,4 @@ const Blog = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
   )
 }
 
-export default Blog
+export default BlogElement

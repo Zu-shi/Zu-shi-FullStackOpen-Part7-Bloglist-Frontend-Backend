@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 // import { QueryClient, QueryClientProvider } from 'react-query'
-import Blog from './Blog'
+import BlogElement from './BlogElement'
 import blogService from '../services/blogs'
 import { useContext } from 'react'
 import { UserContext } from './UserContext'
@@ -77,12 +77,12 @@ export const BlogList = () => {
         (
           blogs.map(
             (blog) => (
-              <Blog
+              <BlogElement
                 key={blog.id}
                 blog={blog}
                 onLikeArticle={onLikeArticle}
                 onDeleteArticle={onDeleteArticle}
-                user={user.id}
+                user={user}
               />
             )
           )

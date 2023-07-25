@@ -8,6 +8,14 @@ const getAllByQuery = async () => {
   return response.data
 }
 
+const getSingleBlogByQuery = async ({ queryKey }) => {
+  const [, id] = queryKey
+  const result = await axios.get(`${baseUrl}/${id}`)
+  console.log('Get single blog')
+  console.log(result)
+  return result.data
+}
+
 const postBlogByQuery = ({ user, blog }) => {
   console.log('postBlogByQuery response')
   console.log(user)
@@ -92,5 +100,6 @@ export default {
   likeBlog,
   deleteBlog,
   getAllByQuery,
-  postBlogByQuery
+  postBlogByQuery,
+  getSingleBlogByQuery
 }
