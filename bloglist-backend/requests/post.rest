@@ -1,11 +1,11 @@
-POST http://localhost:3003/api/blogs/
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NDk0YTEwMzkwN2YwY2Q2MzFhZmZhOGIiLCJpYXQiOjE2ODc2MzI3ODN9.yZqnP6EKtMOQTqwRplp7VamFRWFl2M2g-SUsEmZjHSk
+# POST http://localhost:3003/api/blogs/
+# Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI2NDk0YTEwMzkwN2YwY2Q2MzFhZmZhOGIiLCJpYXQiOjE2ODc2MzI3ODN9.yZqnP6EKtMOQTqwRplp7VamFRWFl2M2g-SUsEmZjHSk
 
-{
-  "title": "Vibecamp Experiences",
-  "url": "www.vibecamp.com"
-}
+# {
+#   "title": "Vibecamp Experiences",
+#   "url": "www.vibecamp.com"
+# }
 ###
 
 POST http://localhost:3003/api/users/
@@ -17,4 +17,13 @@ Content-Type: application/json
 }
 ###
 
+POST http://localhost:3003/api/comments/
+Content-Type: application/json
+
+{
+  "content": "this is a comment",
+  "blogId": "64b9fe59ef89981c1cd54022"
+}
+
+###
 POST http://localhost:3003/api/testing/reset

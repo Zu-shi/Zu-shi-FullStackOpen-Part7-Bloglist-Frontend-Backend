@@ -1,4 +1,6 @@
 import Toggleable from './Toggleable'
+import { useQuery } from 'react-query'
+import { getCommentsByMultiId } from '../services/comments'
 
 /*
 const LikeButton = ({ blog }) => {
@@ -42,6 +44,16 @@ const BlogElement = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
     }
   }
 
+  const { data: comments, error, isLoading } =
+    useQuery(['comments', blog.comments], getCommentsByMultiId)
+
+  const commentDomItems = error || isLoading ? <div>Comments loading</div> :
+    comments.map(
+      (c) => {
+        return <li key={c.id}>{c.content}</li>
+      }
+    )
+
   return (
     <div style={blogStyle}>
       {blog.title}
@@ -59,6 +71,9 @@ const BlogElement = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
         <div>author: {blog.author}</div>
       </Toggleable>
       {renderDeleteButton()}
+      <ul>
+        {commentDomItems}
+      </ul>
     </div>
   )
 }

@@ -12,6 +12,7 @@ const logger = require('./utils/logger');
 const blogRouter = require('./controllers/blogController');
 const userRouter = require('./controllers/userController');
 const loginRouter = require('./controllers/loginController');
+const commentRouter = require('./controllers/commentController');
 
 // Middlewares
 const {
@@ -49,6 +50,7 @@ app.use(tokenExtractor);
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/comments', commentRouter);
 app.use(errorHandler);
 
 module.exports = app;
