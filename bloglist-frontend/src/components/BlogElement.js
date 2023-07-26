@@ -1,6 +1,9 @@
 import Toggleable from './Toggleable'
 import { useQuery } from 'react-query'
 import { getCommentsByMultiId } from '../services/comments'
+import { useContext } from 'react'
+import { CommentForm } from './CommentForm'
+import React from 'react'
 
 /*
 const LikeButton = ({ blog }) => {
@@ -9,6 +12,8 @@ const LikeButton = ({ blog }) => {
   );
 }
 */
+
+export const BlogContext = React.createContext()
 
 const BlogElement = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
   const blogStyle = {
@@ -74,6 +79,9 @@ const BlogElement = ({ user, blog, onLikeArticle, onDeleteArticle }) => {
       <ul>
         {commentDomItems}
       </ul>
+      <BlogContext.Provider value={blog}>
+        <CommentForm></CommentForm>
+      </BlogContext.Provider>
     </div>
   )
 }
